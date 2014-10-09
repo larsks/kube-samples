@@ -1,0 +1,41 @@
+apiVersion: v1beta2
+id: simpleweb
+desiredState:
+  manifest:
+    version: v1beta2
+    id: simpleweb
+    volumes:
+      - name: data
+        source:
+          emptyDir: {}
+    containers:
+      - name: simpleweb-1
+        image: larsks/simpleweb
+        env:
+          - name: THTTPD_DIR 
+            value: /srv/data
+          - name: THTTPD_PORT
+            value: 8080
+        volumeMounts:
+          - name: data
+            mountPath: /srv/data
+        livenessProbe:
+          type: http
+          httpGet:
+            port: 8080
+            path: /
+      - name: simpleweb-2
+        image: larsks/simpleweb
+        env:
+          - name: THTTPD_DIR 
+            value: /srv/data
+          - name: THTTPD_PORT
+            value: 8081
+        volumeMounts:
+          - name: data
+            mountPath: /srv/data
+        livenessProbe:
+          type: http
+          httpGet:
+            port: 8080
+            path: /
